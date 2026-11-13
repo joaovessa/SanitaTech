@@ -1,0 +1,5 @@
+# Preservar bytes dos recortes para os hashes do manifesto em qualquer SO.
+data/** -text
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf

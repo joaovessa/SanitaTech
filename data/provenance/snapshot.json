@@ -1,0 +1,232 @@
+{
+  "snapshot_at_utc": "2026-11-13T14:40:45.492293+00:00",
+  "health_coverage": "Parcial; RD-SP por competência de processamento",
+  "health_completed_competencies": [
+    "2021-01",
+    "2021-02",
+    "2021-03",
+    "2021-04",
+    "2021-05",
+    "2021-06",
+    "2021-07",
+    "2021-08",
+    "2024-01"
+  ],
+  "health_expected_competencies": 48,
+  "files": [
+    {
+      "path": "data/processed/basico.csv",
+      "bytes": 187776,
+      "sha256": "c530fe9f076c681f6cbbfa02f63f067be671e69e66c06e4350450bdcff850c77",
+      "status": {
+        "source": "basico",
+        "updated_at": "2026-11-13T14:32:44.745036+00:00",
+        "state": "ready",
+        "rows": 778,
+        "file": "Agregados_por_setores_basico_BR_20260520.zip",
+        "url": "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/Agregados_por_setores_basico_BR_20260520.zip"
+      }
+    },
+    {
+      "path": "data/processed/demografia.csv",
+      "bytes": 95202,
+      "sha256": "7a28cba580e1a3261483978ee858061140b5a3c597fd143de9c92ec742bdbbe0",
+      "status": {
+        "source": "demografia",
+        "updated_at": "2026-11-13T14:33:47.962654+00:00",
+        "state": "ready",
+        "rows": 771,
+        "file": "Agregados_por_setores_demografia_BR.zip",
+        "url": "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/Agregados_por_setores_demografia_BR.zip"
+      }
+    },
+    {
+      "path": "data/processed/domicilios1.csv",
+      "bytes": 175227,
+      "sha256": "b708483a94c9813d973d86221b13a1ad2dae13de028bfd5b91e8f359aa94c66f",
+      "status": {
+        "source": "domicilios1",
+        "updated_at": "2026-11-13T14:33:28.662473+00:00",
+        "state": "ready",
+        "rows": 771,
+        "file": "Agregados_por_setores_caracteristicas_domicilio1_BR_20261021.zip",
+        "url": "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/Agregados_por_setores_caracteristicas_domicilio1_BR_20261021.zip"
+      }
+    },
+    {
+      "path": "data/processed/saneamento.csv",
+      "bytes": 693318,
+      "sha256": "b743ff0334edcdbecb1b9c9e8b8cfb06c266e18e5cc31560f83f3e6094221808",
+      "status": {
+        "source": "saneamento",
+        "updated_at": "2026-11-13T14:33:12.738721+00:00",
+        "state": "ready",
+        "rows": 771,
+        "file": "Agregados_por_setores_caracteristicas_domicilio2_BR_20250417.zip",
+        "url": "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/Agregados_por_setores_caracteristicas_domicilio2_BR_20250417.zip"
+      }
+    },
+    {
+      "path": "data/processed/setores.geojson",
+      "bytes": 1618364,
+      "sha256": "9061bc3934a821f66688f85bf961021f81e273c8988d37dbbb41ee93cfa26466",
+      "status": {
+        "source": "malha",
+        "updated_at": "2026-11-13T14:32:41.410665+00:00",
+        "state": "ready",
+        "rows": 778,
+        "file": "SP_setores_CD2022.gpkg",
+        "url": "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/malha_com_atributos/setores/gpkg/UF/SP/SP_setores_CD2022.gpkg"
+      }
+    },
+    {
+      "path": "data/processed/sih_202101.json",
+      "bytes": 112,
+      "sha256": "51b70eaf176917f5682b0f6f66227a0480278a659f00b532750d59e694eb9713",
+      "status": {
+        "source": "sih_202101",
+        "updated_at": "2026-11-13T14:35:02.829524+00:00",
+        "state": "ready",
+        "rows": 3,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2101.dbc",
+        "competencia": "2021-01",
+        "aih_a00_a09": 3,
+        "valor_pago": 1102.21,
+        "aih_residentes_total": 1821
+      }
+    },
+    {
+      "path": "data/processed/sih_202102.json",
+      "bytes": 112,
+      "sha256": "42466c0cb0be94d76dd9208d3fc7687332df44d0ce4baf342de04697f4694f65",
+      "status": {
+        "source": "sih_202102",
+        "updated_at": "2026-11-13T14:35:33.703987+00:00",
+        "state": "ready",
+        "rows": 11,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2102.dbc",
+        "competencia": "2021-02",
+        "aih_a00_a09": 11,
+        "valor_pago": 3915.3,
+        "aih_residentes_total": 1865
+      }
+    },
+    {
+      "path": "data/processed/sih_202103.json",
+      "bytes": 123,
+      "sha256": "2c1e102ff744c30004f4cb44cff2df3f0dae5da601f29e2cdff59d85a96da559",
+      "status": {
+        "source": "sih_202103",
+        "updated_at": "2026-11-13T14:36:06.440337+00:00",
+        "state": "ready",
+        "rows": 8,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2103.dbc",
+        "competencia": "2021-03",
+        "aih_a00_a09": 8,
+        "valor_pago": 3184.0299999999997,
+        "aih_residentes_total": 1680
+      }
+    },
+    {
+      "path": "data/processed/sih_202104.json",
+      "bytes": 111,
+      "sha256": "bdafb364c184555800f58687332b365678b5720511a9a0dbb27bfb54e1fcc94b",
+      "status": {
+        "source": "sih_202104",
+        "updated_at": "2026-11-13T14:36:39.511736+00:00",
+        "state": "ready",
+        "rows": 2,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2104.dbc",
+        "competencia": "2021-04",
+        "aih_a00_a09": 2,
+        "valor_pago": 401.12,
+        "aih_residentes_total": 1685
+      }
+    },
+    {
+      "path": "data/processed/sih_202105.json",
+      "bytes": 110,
+      "sha256": "ba93d94800ffcc4a24873ff36dc68313fac4335b2c4d89cc0a57c4023f9b6841",
+      "status": {
+        "source": "sih_202105",
+        "updated_at": "2026-11-13T14:37:36.796456+00:00",
+        "state": "ready",
+        "rows": 2,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2105.dbc",
+        "competencia": "2021-05",
+        "aih_a00_a09": 2,
+        "valor_pago": 657.8,
+        "aih_residentes_total": 1767
+      }
+    },
+    {
+      "path": "data/processed/sih_202106.json",
+      "bytes": 110,
+      "sha256": "c1ca6c095639f2a79b7fa4994dc82405329b5520e652f1cc6c289912a680ca14",
+      "status": {
+        "source": "sih_202106",
+        "updated_at": "2026-11-13T14:38:30.211780+00:00",
+        "state": "ready",
+        "rows": 1,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2106.dbc",
+        "competencia": "2021-06",
+        "aih_a00_a09": 1,
+        "valor_pago": 340.9,
+        "aih_residentes_total": 1751
+      }
+    },
+    {
+      "path": "data/processed/sih_202107.json",
+      "bytes": 112,
+      "sha256": "4c9f6f025d6e646e7e6624cc1dd2fd04239d28fcabaca4f6fc027b6f357510bd",
+      "status": {
+        "source": "sih_202107",
+        "updated_at": "2026-11-13T14:39:24.387302+00:00",
+        "state": "ready",
+        "rows": 1,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2107.dbc",
+        "competencia": "2021-07",
+        "aih_a00_a09": 1,
+        "valor_pago": 2015.46,
+        "aih_residentes_total": 1776
+      }
+    },
+    {
+      "path": "data/processed/sih_202108.json",
+      "bytes": 123,
+      "sha256": "5fe931dcd09ab50ab8aee4b2ac0964b435e61807b541a0cd5fb9b630cef56e35",
+      "status": {
+        "source": "sih_202108",
+        "updated_at": "2026-11-13T14:40:02.598490+00:00",
+        "state": "ready",
+        "rows": 4,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2108.dbc",
+        "competencia": "2021-08",
+        "aih_a00_a09": 4,
+        "valor_pago": 1126.1299999999999,
+        "aih_residentes_total": 1880
+      }
+    },
+    {
+      "path": "data/processed/sih_202401.json",
+      "bytes": 123,
+      "sha256": "a84c097265b1017bdfa7444f31cfb7f272000760b76eb82d310dda2bd0222096",
+      "status": {
+        "source": "sih_202401",
+        "updated_at": "2026-11-13T14:34:05.369922+00:00",
+        "state": "ready",
+        "rows": 14,
+        "url": "ftp://ftp.datasus.gov.br/dissemin/publicos/SIHSUS/200801_/Dados/RDSP2401.dbc",
+        "competencia": "2024-01",
+        "aih_a00_a09": 14,
+        "valor_pago": 5335.769999999999,
+        "aih_residentes_total": 2027
+      }
+    },
+    {
+      "path": "data/reference/dicionario_de_dados_agregados_por_setores_censitarios_20261113.xlsx",
+      "bytes": 124013,
+      "sha256": "c2630e685e1156e4bd3a62c79c62b93a83d8a41bfa0da75f6e21b9404619c3f0"
+    }
+  ]
+}

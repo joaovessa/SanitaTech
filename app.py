@@ -19,7 +19,7 @@ NUVEM = os.environ.get('SANITATECH_MODO', _PADRAO).strip().lower() == 'nuvem'
 st.set_page_config(page_title='SanitaTech | Diadema', page_icon=str(ASSETS / 'sanitatech-mark.svg'), layout='wide')
 st.logo(str(ASSETS / 'sanitatech-logo.svg'), icon_image=str(ASSETS / 'sanitatech-mark.svg'), size='large')
 st.title('SanitaTech')
-st.caption('Diadema · Saneamento e saúde pública · Censo 2022 / SIH-SUS 2021–2024')
+st.caption('Diadema · Onde o esgoto custa saúde · Censo 2022 / SIH-SUS 2021–2024')
 
 
 def records():

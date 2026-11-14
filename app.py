@@ -7,7 +7,9 @@ import streamlit as st
 import plotly.express as px
 from pipeline import ROOT, DATA, OUT, RAW, BASE, TASKS
 
-st.set_page_config(page_title='SanitaTech | Diadema', page_icon='💧', layout='wide')
+ASSETS = ROOT / 'assets'
+st.set_page_config(page_title='SanitaTech | Diadema', page_icon=str(ASSETS / 'sanitatech-mark.svg'), layout='wide')
+st.logo(str(ASSETS / 'sanitatech-logo.svg'), icon_image=str(ASSETS / 'sanitatech-mark.svg'), size='large')
 st.title('SanitaTech')
 st.caption('Diadema · Saneamento e saúde pública · Censo 2022 / SIH-SUS 2021–2024')
 
@@ -114,8 +116,8 @@ with territory:
         a.metric('Setores no arquivo oficial', len(geo))
         b.metric('Ano de referência', '2022')
         layer = pdk.Layer('GeoJsonLayer', data=json.loads(geo.to_json()), pickable=True,
-                          stroked=True, filled=True, get_fill_color=[8, 127, 140, 70],
-                          get_line_color=[8, 87, 110], line_width_min_pixels=1)
+                          stroked=True, filled=True, get_fill_color=[11, 79, 92, 60],
+                          get_line_color=[11, 79, 92], line_width_min_pixels=1)
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=pdk.ViewState(
             latitude=-23.69, longitude=-46.62, zoom=11.8),
             map_style='https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
@@ -148,7 +150,7 @@ with health:
         b.metric('Valor pago nessas AIHs', f"R$ {frame.valor_pago.sum():,.2f}")
         st.plotly_chart(px.bar(frame, x='competencia', y='aih_a00_a09',
                               labels={'competencia': 'Competência coletada', 'aih_a00_a09': 'AIHs A00–A09'},
-                              color_discrete_sequence=['#087f8c']), width='stretch')
+                              color_discrete_sequence=['#0B4F5C']), width='stretch')
         st.dataframe(frame, hide_index=True)
         st.download_button('Baixar resumo agregado', frame.to_csv(index=False), 'sih_diadema_competencias.csv', 'text/csv')
     else:

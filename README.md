@@ -85,17 +85,17 @@ O app começou no plano gratuito F1, mas a instalação das dependências (GeoPa
 
 ## Evidências
 
-| Requisito | Onde ver | Captura |
+| Requisito | Onde ver | Captura no PDF de entrega |
 | --- | --- | --- |
-| Project e Issues | [Project](https://github.com/users/PedroKaune/projects/1) · [Issues](https://github.com/joaovessa/SanitaTech/issues?q=is%3Aissue) | [01-project.png](docs/evidencias/01-project.png) · [02-issues.png](docs/evidencias/02-issues.png) |
+| Project e Issues | [Project](https://github.com/users/PedroKaune/projects/1) · [Issues](https://github.com/joaovessa/SanitaTech/issues?q=is%3Aissue) | Figuras 1 e 2 |
 | Repositório e `main` | [código](https://github.com/joaovessa/SanitaTech) | — |
-| Branches e commits | [branches](https://github.com/joaovessa/SanitaTech/branches/all) · [commits](https://github.com/joaovessa/SanitaTech/commits/main) | [03-branches-commits.png](docs/evidencias/03-branches-commits.png) |
-| Pull Requests e merge | [PRs](https://github.com/joaovessa/SanitaTech/pulls?q=is%3Apr) | [04-pull-request.png](docs/evidencias/04-pull-request.png) |
-| Workflow configurado e executado | [ci-cd.yml](.github/workflows/ci-cd.yml) · [execuções](https://github.com/joaovessa/SanitaTech/actions) | [05-actions-ci.png](docs/evidencias/05-actions-ci.png) · [06-actions-deploy.png](docs/evidencias/06-actions-deploy.png) |
-| App publicado no Azure | https://sanitatech-diadema-fwa8a2c7e6bzhgev.brazilsouth-01.azurewebsites.net | [07-app-publicado.png](docs/evidencias/07-app-publicado.png) |
-| Alteração atualizada pelo workflow | PR `feature/ajuste-demo` e o run de deploy correspondente | [08-app-antes.png](docs/evidencias/08-app-antes.png) · [09-app-depois.png](docs/evidencias/09-app-depois.png) |
+| Branches e commits | [branches](https://github.com/joaovessa/SanitaTech/branches/all) · [commits](https://github.com/joaovessa/SanitaTech/commits/main) | Figuras 3 e 4 |
+| Pull Requests e merge | [PRs](https://github.com/joaovessa/SanitaTech/pulls?q=is%3Apr) | Figuras 5 e 6 |
+| Workflow configurado e executado | [ci-cd.yml](.github/workflows/ci-cd.yml) · [execuções](https://github.com/joaovessa/SanitaTech/actions) | Figuras 7 e 8 |
+| App publicado no Azure | https://sanitatech-diadema-fwa8a2c7e6bzhgev.brazilsouth-01.azurewebsites.net | Figuras 9 a 12 (app) e 13 a 16 (portal do Azure) |
+| Alteração atualizada pelo workflow | PR `feature/ajuste-demo` e o run de deploy correspondente | Figuras 6, 8 e 9 |
 
-A alteração de demonstração troca o subtítulo do painel para "Onde o esgoto custa saúde". Nas capturas 08 e 09, o rodapé da barra lateral mostra o commit publicado antes e depois, e esse commit é o mesmo do run de deploy na captura 06.
+A alteração de demonstração troca o subtítulo do painel para "Onde o esgoto custa saúde". No PDF de entrega, a Figura 9 mostra o rodapé da barra lateral com o commit publicado (2668f3d, run #14), o mesmo do run de deploy na Figura 8. O PDF foi entregue junto com o link deste repositório.
 
 ## Detalhes técnicos da coleta de dados
 

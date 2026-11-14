@@ -52,6 +52,17 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@v4
 
+      - name: Configurar Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Instalar dependências no pacote
+        # O App Service adiciona __oryx_packages__ ao PYTHONPATH na inicialização,
+        # então o app sobe sem precisar compilar nada no servidor.
+        run: pip install --no-compile --target __oryx_packages__ -r requirements.txt
+
       - name: Registrar a versão publicada
         run: |
           mkdir -p static

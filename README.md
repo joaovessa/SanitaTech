@@ -64,9 +64,9 @@ Arquivo: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml)
 
 **Deploy no Azure App Service** (só depois dos testes, só na `main`):
 
-1. grava o commit, o número do run e o horário em `static/version.json`;
-2. empacota a aplicação em `app.zip`, sem testes, workflows e dados brutos;
-3. publica com `azure/webapps-deploy@v3`. O App Service instala as dependências durante o deploy (`SCM_DO_BUILD_DURING_DEPLOYMENT=true`);
+1. instala as dependências do `requirements.txt` na pasta `__oryx_packages__`, que o App Service coloca no `PYTHONPATH` ao iniciar;
+2. grava o commit, o número do run e o horário em `static/version.json`;
+3. empacota a aplicação em `app.zip`, sem testes, workflows e dados brutos, e publica com `azure/webapps-deploy@v3`;
 4. valida o app no ar: espera o healthcheck `/_stcore/health` responder e confere que `/app/static/version.json` traz o mesmo commit que acabou de passar no CI. Se não bater, o workflow falha.
 
 O mesmo `version.json` aparece no rodapé da barra lateral do painel, o que mostra a qualquer pessoa qual commit está no ar.
@@ -78,7 +78,7 @@ O mesmo `version.json` aparece no rodapé da barra lateral do painel, o que most
 - **Provedor:** Microsoft Azure (assinatura Azure for Students)
 - **Serviço:** Azure App Service, Linux, plano B1, runtime Python 3.13, região Brazil South
 - **Inicialização:** `python -m streamlit run app.py --server.port 8000 --server.address 0.0.0.0 --server.headless true`
-- **Configurações do app:** `SCM_DO_BUILD_DURING_DEPLOYMENT=true`, para o App Service instalar o `requirements.txt` no deploy. O modo nuvem liga sozinho porque o App Service define `WEBSITE_SITE_NAME`.
+- **Dependências:** chegam prontas no pacote, instaladas pelo workflow; o servidor não compila nada. O modo nuvem liga sozinho porque o App Service define `WEBSITE_SITE_NAME`.
 - **URL:** https://sanitatech-diadema-fwa8a2c7e6bzhgev.brazilsouth-01.azurewebsites.net
 
 O app começou no plano gratuito F1, mas a instalação das dependências (GeoPandas) estourou a cota diária de CPU no primeiro deploy e o Azure suspendeu o app. Por isso o plano foi elevado para B1, que custa cerca de US$ 0,02 por hora do crédito de estudante.

@@ -1,5 +1,8 @@
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import json
+import os
 import subprocess
 import sys
 import pandas as pd
@@ -7,7 +10,14 @@ import streamlit as st
 import plotly.express as px
 from pipeline import ROOT, DATA, OUT, RAW, BASE, TASKS
 
-st.set_page_config(page_title='SanitaTech | Diadema', page_icon='💧', layout='wide')
+ASSETS = ROOT / 'assets'
+# Na nuvem a coleta fica desligada: o painel publicado só explora os recortes
+# versionados e não baixa arquivos do IBGE/DATASUS. O App Service sempre define
+# WEBSITE_SITE_NAME, então o modo nuvem liga sozinho lá; SANITATECH_MODO força um modo.
+_PADRAO = 'nuvem' if os.environ.get('WEBSITE_SITE_NAME') else 'local'
+NUVEM = os.environ.get('SANITATECH_MODO', _PADRAO).strip().lower() == 'nuvem'
+st.set_page_config(page_title='SanitaTech | Diadema', page_icon=str(ASSETS / 'sanitatech-mark.svg'), layout='wide')
+st.logo(str(ASSETS / 'sanitatech-logo.svg'), icon_image=str(ASSETS / 'sanitatech-mark.svg'), size='large')
 st.title('SanitaTech')
 st.caption('Diadema · Saneamento e saúde pública · Censo 2022 / SIH-SUS 2021–2024')
 
@@ -27,6 +37,20 @@ def records():
         except (OSError, json.JSONDecodeError):
             pass
     return list(result.values())
+
+
+def versao_publicada():
+    """Lê o static/version.json gravado pelo workflow de deploy."""
+    caminho = ROOT / 'static' / 'version.json'
+    if not caminho.exists():
+        return 'Versão local · sem deploy'
+    try:
+        info = json.loads(caminho.read_text(encoding='utf-8'))
+        quando = datetime.fromisoformat(info['publicado_em'].replace('Z', '+00:00'))
+        quando = quando.astimezone(ZoneInfo('America/Sao_Paulo')).strftime('%d/%m/%Y %H:%M')
+        return f"Versão {info['commit']} · run #{info['run']} · publicada em {quando}"
+    except (OSError, KeyError, ValueError):
+        return 'Versão publicada sem metadados válidos'
 
 
 def launch(task, year=None, month=None):
@@ -50,35 +74,42 @@ with st.sidebar:
     st.write('Diadema, São Paulo')
     st.caption('IBGE 3513801 · SUS 351380')
     st.divider()
-    st.write('Ambiente local')
+    st.write('Versão publicada na nuvem' if NUVEM else 'Ambiente local')
     st.caption('Os arquivos brutos não são publicados. Não são exibidos pontos de pacientes.')
     st.link_button('Catálogo oficial do IBGE', BASE)
     st.link_button('Transferência DATASUS', 'https://datasus.saude.gov.br/transferencia-de-arquivos/')
+    st.divider()
+    st.caption(versao_publicada())
 
 collect, territory, health, model, sources = st.tabs([
     'Extração das bases', 'Território', 'Saúde', 'Modelo e prioridades', 'Fontes e dicionário'])
 
 with collect:
     st.subheader('Central de extração')
-    st.write('Baixe as bases oficiais e acompanhe o recorte de Diadema. Downloads concluídos são reutilizados após a conferência do hash.')
+    st.write('Situação das extrações que geraram os dados publicados.' if NUVEM else
+             'Baixe as bases oficiais e acompanhe o recorte de Diadema. Downloads concluídos são reutilizados após a conferência do hash.')
     labels = {'malha': 'Malha e atributos', 'basico': 'População e domicílios',
               'saneamento': 'Características domiciliares 2', 'domicilios1': 'Características domiciliares 1',
               'demografia': 'Idade e demografia', 'dicionario': 'Dicionário das variáveis'}
-    c1, c2 = st.columns(2)
-    with c1:
-        selected = st.selectbox('Base do Censo 2022', list(TASKS), format_func=labels.get)
-        if st.button('Extrair base do IBGE', type='primary'):
-            launch(selected)
-    with c2:
-        year = st.selectbox('Ano da competência SIH', [2024, 2023, 2022, 2021])
-        month = st.selectbox('Mês da competência', list(range(1, 13)))
-        if st.button('Extrair competência SIH-SUS'):
-            launch('sih', year, month)
-        if st.button('Coletar período completo · 2021–2024'):
-            launch('sih-periodo')
-        st.caption('Arquivos RD-SP contêm AIHs processadas em SP. Residentes atendidos em outras UFs ainda não estão incluídos.')
+    if NUVEM:
+        st.info('Nesta versão publicada a coleta fica desativada. O painel mostra os recortes do Censo 2022 e os resumos do SIH-SUS versionados no repositório.')
+    else:
+        c1, c2 = st.columns(2)
+        with c1:
+            selected = st.selectbox('Base do Censo 2022', list(TASKS), format_func=labels.get)
+            if st.button('Extrair base do IBGE', type='primary'):
+                launch(selected)
+        with c2:
+            year = st.selectbox('Ano da competência SIH', [2024, 2023, 2022, 2021])
+            month = st.selectbox('Mês da competência', list(range(1, 13)))
+            if st.button('Extrair competência SIH-SUS'):
+                launch('sih', year, month)
+            if st.button('Coletar período completo · 2021–2024'):
+                launch('sih-periodo')
+            st.caption('Arquivos RD-SP contêm AIHs processadas em SP. Residentes atendidos em outras UFs ainda não estão incluídos.')
 
-    @st.fragment(run_every='3s')
+    # Na nuvem não há coleta em andamento: o painel não precisa se atualizar sozinho.
+    @st.fragment(run_every=None if NUVEM else '3s')
     def progress():
         rows = records()
         done = sum(r.get('state') == 'ready' for r in rows)
@@ -114,8 +145,8 @@ with territory:
         a.metric('Setores no arquivo oficial', len(geo))
         b.metric('Ano de referência', '2022')
         layer = pdk.Layer('GeoJsonLayer', data=json.loads(geo.to_json()), pickable=True,
-                          stroked=True, filled=True, get_fill_color=[8, 127, 140, 70],
-                          get_line_color=[8, 87, 110], line_width_min_pixels=1)
+                          stroked=True, filled=True, get_fill_color=[11, 79, 92, 60],
+                          get_line_color=[11, 79, 92], line_width_min_pixels=1)
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=pdk.ViewState(
             latitude=-23.69, longitude=-46.62, zoom=11.8),
             map_style='https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
@@ -148,7 +179,7 @@ with health:
         b.metric('Valor pago nessas AIHs', f"R$ {frame.valor_pago.sum():,.2f}")
         st.plotly_chart(px.bar(frame, x='competencia', y='aih_a00_a09',
                               labels={'competencia': 'Competência coletada', 'aih_a00_a09': 'AIHs A00–A09'},
-                              color_discrete_sequence=['#087f8c']), width='stretch')
+                              color_discrete_sequence=['#0B4F5C']), width='stretch')
         st.dataframe(frame, hide_index=True)
         st.download_button('Baixar resumo agregado', frame.to_csv(index=False), 'sih_diadema_competencias.csv', 'text/csv')
     else:

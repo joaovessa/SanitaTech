@@ -1,8 +1,9 @@
+# Identidade visual SanitaTech: petróleo (#0B4F5C), areia (#F5F2EB) e tinta (#0F2329).
 [theme]
-primaryColor = "#087f8c"
-backgroundColor = "#f5f8fa"
-secondaryBackgroundColor = "#e7eff3"
-textColor = "#153243"
+primaryColor = "#0B4F5C"
+backgroundColor = "#F5F2EB"
+secondaryBackgroundColor = "#EAE5D9"
+textColor = "#0F2329"
 font = "sans serif"
 [server]
 address = "127.0.0.1"
@@ -11,3 +12,6 @@ headless = true
 enableStaticServing = true
 [browser]
 gatherUsageStats = false
+[client]
+# Esconde o menu de desenvolvedor (botão Deploy) para quem acessa o app publicado.
+toolbarMode = "viewer"

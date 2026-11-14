@@ -1,5 +1,8 @@
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import json
+import os
 import subprocess
 import sys
 import pandas as pd
@@ -8,6 +11,11 @@ import plotly.express as px
 from pipeline import ROOT, DATA, OUT, RAW, BASE, TASKS
 
 ASSETS = ROOT / 'assets'
+# Na nuvem a coleta fica desligada: o painel publicado só explora os recortes
+# versionados e não baixa arquivos do IBGE/DATASUS. O App Service sempre define
+# WEBSITE_SITE_NAME, então o modo nuvem liga sozinho lá; SANITATECH_MODO força um modo.
+_PADRAO = 'nuvem' if os.environ.get('WEBSITE_SITE_NAME') else 'local'
+NUVEM = os.environ.get('SANITATECH_MODO', _PADRAO).strip().lower() == 'nuvem'
 st.set_page_config(page_title='SanitaTech | Diadema', page_icon=str(ASSETS / 'sanitatech-mark.svg'), layout='wide')
 st.logo(str(ASSETS / 'sanitatech-logo.svg'), icon_image=str(ASSETS / 'sanitatech-mark.svg'), size='large')
 st.title('SanitaTech')
@@ -31,6 +39,20 @@ def records():
     return list(result.values())
 
 
+def versao_publicada():
+    """Lê o static/version.json gravado pelo workflow de deploy."""
+    caminho = ROOT / 'static' / 'version.json'
+    if not caminho.exists():
+        return 'Versão local · sem deploy'
+    try:
+        info = json.loads(caminho.read_text(encoding='utf-8'))
+        quando = datetime.fromisoformat(info['publicado_em'].replace('Z', '+00:00'))
+        quando = quando.astimezone(ZoneInfo('America/Sao_Paulo')).strftime('%d/%m/%Y %H:%M')
+        return f"Versão {info['commit']} · run #{info['run']} · publicada em {quando}"
+    except (OSError, KeyError, ValueError):
+        return 'Versão publicada sem metadados válidos'
+
+
 def launch(task, year=None, month=None):
     key = f'sih_{year}{month:02}' if task == 'sih' else task
     processes = st.session_state.setdefault('processes', {})
@@ -52,35 +74,42 @@ with st.sidebar:
     st.write('Diadema, São Paulo')
     st.caption('IBGE 3513801 · SUS 351380')
     st.divider()
-    st.write('Ambiente local')
+    st.write('Versão publicada na nuvem' if NUVEM else 'Ambiente local')
     st.caption('Os arquivos brutos não são publicados. Não são exibidos pontos de pacientes.')
     st.link_button('Catálogo oficial do IBGE', BASE)
     st.link_button('Transferência DATASUS', 'https://datasus.saude.gov.br/transferencia-de-arquivos/')
+    st.divider()
+    st.caption(versao_publicada())
 
 collect, territory, health, model, sources = st.tabs([
     'Extração das bases', 'Território', 'Saúde', 'Modelo e prioridades', 'Fontes e dicionário'])
 
 with collect:
     st.subheader('Central de extração')
-    st.write('Baixe as bases oficiais e acompanhe o recorte de Diadema. Downloads concluídos são reutilizados após a conferência do hash.')
+    st.write('Situação das extrações que geraram os dados publicados.' if NUVEM else
+             'Baixe as bases oficiais e acompanhe o recorte de Diadema. Downloads concluídos são reutilizados após a conferência do hash.')
     labels = {'malha': 'Malha e atributos', 'basico': 'População e domicílios',
               'saneamento': 'Características domiciliares 2', 'domicilios1': 'Características domiciliares 1',
               'demografia': 'Idade e demografia', 'dicionario': 'Dicionário das variáveis'}
-    c1, c2 = st.columns(2)
-    with c1:
-        selected = st.selectbox('Base do Censo 2022', list(TASKS), format_func=labels.get)
-        if st.button('Extrair base do IBGE', type='primary'):
-            launch(selected)
-    with c2:
-        year = st.selectbox('Ano da competência SIH', [2024, 2023, 2022, 2021])
-        month = st.selectbox('Mês da competência', list(range(1, 13)))
-        if st.button('Extrair competência SIH-SUS'):
-            launch('sih', year, month)
-        if st.button('Coletar período completo · 2021–2024'):
-            launch('sih-periodo')
-        st.caption('Arquivos RD-SP contêm AIHs processadas em SP. Residentes atendidos em outras UFs ainda não estão incluídos.')
+    if NUVEM:
+        st.info('Nesta versão publicada a coleta fica desativada. O painel mostra os recortes do Censo 2022 e os resumos do SIH-SUS versionados no repositório.')
+    else:
+        c1, c2 = st.columns(2)
+        with c1:
+            selected = st.selectbox('Base do Censo 2022', list(TASKS), format_func=labels.get)
+            if st.button('Extrair base do IBGE', type='primary'):
+                launch(selected)
+        with c2:
+            year = st.selectbox('Ano da competência SIH', [2024, 2023, 2022, 2021])
+            month = st.selectbox('Mês da competência', list(range(1, 13)))
+            if st.button('Extrair competência SIH-SUS'):
+                launch('sih', year, month)
+            if st.button('Coletar período completo · 2021–2024'):
+                launch('sih-periodo')
+            st.caption('Arquivos RD-SP contêm AIHs processadas em SP. Residentes atendidos em outras UFs ainda não estão incluídos.')
 
-    @st.fragment(run_every='3s')
+    # Na nuvem não há coleta em andamento: o painel não precisa se atualizar sozinho.
+    @st.fragment(run_every=None if NUVEM else '3s')
     def progress():
         rows = records()
         done = sum(r.get('state') == 'ready' for r in rows)

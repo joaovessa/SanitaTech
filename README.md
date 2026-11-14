@@ -16,9 +16,9 @@ O SanitaTech reúne, por setor censitário, as condições de saneamento do Cens
 
 | Nome | RM | Turma |
 | --- | --- | --- |
-| João Silva de Araújo | 561420 | 2TSC |
-| Esther Macedo | 566197 | 2TSC |
-| Pedro Enrique Kaune Nascimento | _(a preencher)_ | 2TSC |
+| João Silva de Araújo | 561420 | 2TSCPV |
+| Esther Macedo | 566197 | 2TSCPV |
+| Pedro Enrique Kaune Nascimento | 565905 | 2TSCPV |
 
 ## Origem do projeto
 

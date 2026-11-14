@@ -1,4 +1,8 @@
 # Identidade visual SanitaTech: petróleo (#0B4F5C), areia (#F5F2EB) e tinta (#0F2329).
+[global]
+# Com as dependências em __oryx_packages__ o Streamlit se acha em modo de desenvolvimento
+# e recusa --server.port. Em produção o modo precisa ficar desligado.
+developmentMode = false
 [theme]
 primaryColor = "#0B4F5C"
 backgroundColor = "#F5F2EB"
